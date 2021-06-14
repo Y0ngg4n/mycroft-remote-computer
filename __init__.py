@@ -126,7 +126,7 @@ class RemoteComputerSkill(MycroftSkill):
                 session = transport.open_session()
                 session.set_combine_stderr(True)
                 session.get_pty()
-
+                self.log.info(sys.platform)
                 if sys.platform.startswith("win"):
                     session.exec_command("shutdown /s")
 
