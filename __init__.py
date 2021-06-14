@@ -123,41 +123,32 @@ class RemoteComputerSkill(MycroftSkill):
 
                 transport = client.get_transport()
 
-                session = transport.open_session()
-                session.set_combine_stderr(True)
-                session.get_pty()
                 try:
-                    session.exec_command('cat /dev/null')
-
-                    try:
-                        session = transport.open_session()
-                        session.set_combine_stderr(True)
-                        session.get_pty()
-                        self.log.info("Shutdown Linux PC")
-                        session.exec_command("sudo -k shutdown -h now")
-                        stdin = session.makefile('wb', -1)
-                        stdout = session.makefile('rb', -1)
-                        stdin.write(sudo_password + '\n')
-                        stdin.flush()
-                        stdout.read()
-                    except Exception as e:
-                        self.speak_dialog("connection.error")
-                        self.log.error(e)
+                    session = transport.open_session()
+                    session.set_combine_stderr(True)
+                    session.get_pty()
+                    session.exec_command("sudo -k shutdown -h now")
+                    stdin = session.makefile('wb', -1)
+                    stdout = session.makefile('rb', -1)
+                    stdin.write(sudo_password + '\n')
+                    stdin.flush()
+                    stdout.read()
                 except Exception as e:
-                    try:
-                        session = transport.open_session()
-                        session.set_combine_stderr(True)
-                        session.get_pty()
-                        self.log.info("Shutdown Windows PC")
-                        session.exec_command("shutdown /s")
-                        stdin = session.makefile('wb', -1)
-                        stdout = session.makefile('rb', -1)
-                        stdin.write(sudo_password + '\n')
-                        stdin.flush()
-                        stdout.read()
-                    except Exception as e:
-                        self.speak_dialog("connection.error")
-                        self.log.error(e)
+                    self.speak_dialog("connection.error")
+                    self.log.error(e)
+                try:
+                    session = transport.open_session()
+                    session.set_combine_stderr(True)
+                    session.get_pty()
+                    session.exec_command("shutdown /s")
+                    stdin = session.makefile('wb', -1)
+                    stdout = session.makefile('rb', -1)
+                    stdin.write(sudo_password + '\n')
+                    stdin.flush()
+                    stdout.read()
+                except Exception as e:
+                    self.speak_dialog("connection.error")
+                    self.log.error(e)
 
                 client.close()
 
