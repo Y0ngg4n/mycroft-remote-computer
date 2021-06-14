@@ -60,10 +60,10 @@ class RemoteComputerSkill(MycroftSkill):
             self.speak_dialog("invalid", {"word": "mac"})
             return
 
-        prompt_response = self.ask_yesno("ask.confirmation",
-                                         {"word": "turn on"})
-
-        if prompt_response == "yes":
+        prompt_response = self.ask_yesno("ask.confirmation.startup")
+        yes_match = re.match(self.translate_regex('yes'), prompt_response)
+        no_match = re.match(self.translate_regex('no'), prompt_response)
+        if yes_match:
             try:
                 send_magic_packet(mac_address)
                 self.speak_dialog("computer.on")
@@ -72,7 +72,7 @@ class RemoteComputerSkill(MycroftSkill):
                 self.speak_dialog("connection.error")
                 self.log.error(e)
 
-        elif prompt_response == "no":
+        elif no_match:
             self.speak_dialog("okay")
 
     @intent_handler(IntentBuilder("ComputerOffIntent").require("Computer")
@@ -111,10 +111,10 @@ class RemoteComputerSkill(MycroftSkill):
             self.speak_dialog("invalid", {"word": "I.P"})
             return
 
-        prompt_response = self.ask_yesno("ask.confirmation",
-                                         {"word": "shut down"})
-
-        if prompt_response == "yes":
+        prompt_response = self.ask_yesno("ask.confirmation.shutdown")
+        yes_match = re.match(self.translate_regex('yes'), prompt_response)
+        no_match = re.match(self.translate_regex('no'), prompt_response)
+        if yes_match:
             try:
                 client = paramiko.SSHClient()
                 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -150,7 +150,7 @@ class RemoteComputerSkill(MycroftSkill):
                 self.speak_dialog("connection.error")
                 self.log.error(e)
 
-        elif prompt_response == "no":
+        elif no_match:
             self.speak_dialog("okay")
 
     def stop(self):
