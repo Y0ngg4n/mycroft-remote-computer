@@ -39,7 +39,7 @@ class RemoteComputerSkill(MycroftSkill):
 
             else:
                 mac_address = str(self.settings.get("mac_address"))
-
+            self.log.info("Mac Address: " + mac_address)
             if not mac_address:
                 raise Exception("None found.")
 
