@@ -128,14 +128,14 @@ class RemoteComputerSkill(MycroftSkill):
                 session.get_pty()
                 try:
                     session.exec_command('cat /dev/null')
-                    session.exec_command("shutdown /s")
-                except Exception as e:
                     session.exec_command("sudo -k shutdown -h now")
                     stdin = session.makefile('wb', -1)
                     stdout = session.makefile('rb', -1)
                     stdin.write(sudo_password + '\n')
                     stdin.flush()
                     stdout.read()
+                except Exception as e:
+                    session.exec_command("shutdown /s")
 
                 client.close()
 
