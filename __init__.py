@@ -126,10 +126,10 @@ class RemoteComputerSkill(MycroftSkill):
                 session = transport.open_session()
                 session.set_combine_stderr(True)
                 session.get_pty()
-                stdin, stdout, stderr = session.exec_command('cat /dev/null')
-                if stderr:
+                try:
+                    session.exec_command('cat /dev/null')
                     session.exec_command("shutdown /s")
-                else:
+                except Exception as e:
                     session.exec_command("sudo -k shutdown -h now")
                     stdin = session.makefile('wb', -1)
                     stdout = session.makefile('rb', -1)
