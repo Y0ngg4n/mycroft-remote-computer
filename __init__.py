@@ -38,6 +38,7 @@ class RemoteComputerSkill(MycroftSkill):
                 mac_address = str(config.get("mac_address"))
 
             else:
+                self.log.info("Reading Mac Address from Settings")
                 mac_address = str(self.settings.get("mac_address"))
 
             if not mac_address:
