@@ -150,6 +150,11 @@ class RemoteComputerSkill(MycroftSkill):
                         session.get_pty()
                         self.log.info("Shutdown Windows PC")
                         session.exec_command("shutdown /s")
+                        stdin = session.makefile('wb', -1)
+                        stdout = session.makefile('rb', -1)
+                        stdin.write(sudo_password + '\n')
+                        stdin.flush()
+                        stdout.read()
                     except Exception as e:
                         self.speak_dialog("connection.error")
                         self.log.error(e)
