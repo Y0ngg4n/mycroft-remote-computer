@@ -30,6 +30,7 @@ class RemoteComputerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("ComputerOnIntent").require("Computer")
                     .require("On").optionally("Turn"))
     def handle_turn_on_intent(self, message):
+        self.log("Turning Computer on...")
         try:
             config = self.config_core.get("RemoteComputerSkill", {})
 
@@ -75,6 +76,7 @@ class RemoteComputerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("ComputerOffIntent").require("Computer")
                     .require("Off").optionally("Turn"))
     def handle_turn_off_intent(self, message):
+        self.log("Turning Computer off...")
         try:
             config = self.config_core.get("RemoteComputerSkill", {})
 
@@ -114,10 +116,10 @@ class RemoteComputerSkill(MycroftSkill):
                 client = paramiko.SSHClient()
                 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 client.connect(
-                            hostname=str(ip),
-                            port=port,
-                            username=user,
-                            password=user_password)
+                    hostname=str(ip),
+                    port=port,
+                    username=user,
+                    password=user_password)
 
                 transport = client.get_transport()
 
