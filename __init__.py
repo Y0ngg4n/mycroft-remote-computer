@@ -126,10 +126,9 @@ class RemoteComputerSkill(MycroftSkill):
                 session = transport.open_session()
                 session.set_combine_stderr(True)
                 session.get_pty()
-                self.log.info(sys.platform)
-                if sys.platform.startswith("win"):
+                stdin, stdout, stderr = session.exec_command('cat /dev/null')
+                if stderr:
                     session.exec_command("shutdown /s")
-
                 else:
                     session.exec_command("sudo -k shutdown -h now")
 
