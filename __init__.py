@@ -128,10 +128,12 @@ class RemoteComputerSkill(MycroftSkill):
                 session.get_pty()
                 try:
                     session.exec_command('cat /dev/null')
-                    session = transport.open_session()
-                    session.set_combine_stderr(True)
-                    session.get_pty()
+
                     try:
+                        session = transport.open_session()
+                        session.set_combine_stderr(True)
+                        session.get_pty()
+                        self.log.info("Shutdown Linux PC")
                         session.exec_command("sudo -k shutdown -h now")
                         stdin = session.makefile('wb', -1)
                         stdout = session.makefile('rb', -1)
@@ -143,6 +145,10 @@ class RemoteComputerSkill(MycroftSkill):
                         self.log.error(e)
                 except Exception as e:
                     try:
+                        session = transport.open_session()
+                        session.set_combine_stderr(True)
+                        session.get_pty()
+                        self.log.info("Shutdown Windows PC")
                         session.exec_command("shutdown /s")
                     except Exception as e:
                         self.speak_dialog("connection.error")
